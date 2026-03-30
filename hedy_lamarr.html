@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hedy Lamarr — Stella & Inventrice</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --cream: #f5f0e8;
+      --ink: #1a1410;
+      --mid: #3a2e22;
+      --soft: #8a7a65;
+      --accent: #c0392b;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ink);
+      color: var(--cream);
+      font-family: 'DM Mono', monospace;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      width: 12px; height: 12px;
+      background: var(--gold);
+      border-radius: 50%;
+      position: fixed; pointer-events: none; z-index: 9999;
+      transition: transform 0.15s ease, background 0.2s;
+      transform: translate(-50%, -50%);
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      position: fixed; pointer-events: none; z-index: 9998;
+      transition: transform 0.35s ease, opacity 0.2s;
+      transform: translate(-50%, -50%);
+      opacity: 0.5;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left {
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 80px 60px;
+      position: relative; z-index: 2;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px; letter-spacing: 0.3em; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 28px;
+      opacity: 0; animation: fadeUp 0.8s 0.3s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(56px, 7vw, 96px);
+      line-height: 1;
+      color: var(--cream);
+      opacity: 0; animation: fadeUp 0.8s 0.5s forwards;
+    }
+    .hero-title em {
+      color: var(--gold);
+      font-style: italic;
+    }
+
+    .hero-subtitle {
+      font-size: 12px; letter-spacing: 0.15em;
+      color: var(--soft); margin-top: 24px;
+      max-width: 360px; line-height: 1.9;
+      opacity: 0; animation: fadeUp 0.8s 0.7s forwards;
+    }
+
+    .hero-dates {
+      margin-top: 48px;
+      display: flex; gap: 40px;
+      opacity: 0; animation: fadeUp 0.8s 0.9s forwards;
+    }
+    .hero-dates .date-item { display: flex; flex-direction: column; gap: 6px; }
+    .hero-dates .date-label { font-size: 9px; letter-spacing: 0.3em; color: var(--soft); text-transform: uppercase; }
+    .hero-dates .date-value { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--gold-light); }
+
+    .hero-right {
+      position: relative; overflow: hidden;
+    }
+    .hero-image-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #2a1f14 0%, #1a1410 50%, #0d0a07 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .portrait-art {
+      width: 100%; height: 100%;
+      position: relative; overflow: hidden;
+    }
+
+    /* SVG portrait illustration */
+    .portrait-svg {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    /* Grain overlay */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 1000; opacity: 0.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      padding: 28px 60px;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 500;
+      background: linear-gradient(to bottom, rgba(26,20,16,0.9) 0%, transparent 100%);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; color: var(--gold);
+      letter-spacing: 0.05em;
+    }
+    .nav-links { display: flex; gap: 40px; }
+    .nav-links a {
+      font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--soft); text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 120px 60px;
+      max-width: 1400px; margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 10px; letter-spacing: 0.4em; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 4vw, 56px);
+      color: var(--cream); line-height: 1.15; margin-bottom: 60px;
+    }
+    .section-title em { color: var(--gold); font-style: italic; }
+
+    /* ── TIMELINE ── */
+    #timeline { background: #110e0a; padding: 120px 60px; }
+    #timeline > * { max-width: 1400px; margin: 0 auto; }
+
+    .timeline-list { position: relative; padding-left: 80px; }
+    .timeline-list::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 1px; background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    }
+
+    .timeline-item {
+      display: grid; grid-template-columns: 120px 1fr;
+      gap: 40px; margin-bottom: 64px;
+      opacity: 0; transform: translateX(-20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .timeline-item.visible { opacity: 1; transform: translateX(0); }
+    .timeline-item::before {
+      content: ''; position: absolute; left: -4px;
+      width: 9px; height: 9px; border-radius: 50%;
+      background: var(--gold); margin-top: 6px;
+    }
+
+    .t-year {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px; color: var(--gold-light);
+      line-height: 1;
+    }
+    .t-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; color: var(--cream); margin-bottom: 10px;
+    }
+    .t-body p { font-size: 13px; color: var(--soft); line-height: 1.8; }
+
+    /* ── SCOPERTE (GRID) ── */
+    #scoperte { background: var(--ink); }
+
+    .discoveries-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .discovery-card {
+      background: #1e1710;
+      padding: 48px 40px;
+      position: relative; overflow: hidden;
+      cursor: default;
+      transition: background 0.4s;
+    }
+    .discovery-card:hover { background: #2a2018; }
+    .discovery-card::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 2px;
+      background: var(--gold);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .discovery-card:hover::after { transform: scaleX(1); }
+
+    .disc-number {
+      font-size: 72px; font-family: 'Playfair Display', serif;
+      color: #2a2018; position: absolute; top: 20px; right: 24px;
+      line-height: 1; font-weight: 700; transition: color 0.4s;
+    }
+    .discovery-card:hover .disc-number { color: #3a3020; }
+
+    .disc-icon { font-size: 32px; margin-bottom: 24px; }
+    .disc-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; color: var(--cream); margin-bottom: 16px;
+    }
+    .disc-text { font-size: 12px; color: var(--soft); line-height: 1.9; }
+    .disc-tag {
+      display: inline-block; margin-top: 20px;
+      font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); border: 1px solid var(--gold);
+      padding: 4px 12px;
+    }
+
+    /* ── QUOTE ── */
+    #quote {
+      background: #0a0806;
+      padding: 140px 60px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    #quote::before {
+      content: '"';
+      font-family: 'Playfair Display', serif;
+      font-size: 400px;
+      color: #1a1410;
+      position: absolute; top: -80px; left: 50%;
+      transform: translateX(-50%);
+      line-height: 1;
+      pointer-events: none;
+    }
+    .quote-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(24px, 3.5vw, 44px);
+      color: var(--cream);
+      max-width: 900px; margin: 0 auto 40px;
+      line-height: 1.5;
+      position: relative; z-index: 1;
+    }
+    .quote-text em { color: var(--gold); }
+    .quote-author {
+      font-size: 11px; letter-spacing: 0.3em; color: var(--soft);
+      text-transform: uppercase; position: relative; z-index: 1;
+    }
+
+    /* ── VITA PRIVATA ── */
+    #vita { background: var(--ink); }
+
+    .vita-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+    .vita-cell {
+      padding: 48px;
+      background: #1a140e;
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s, transform 0.6s;
+    }
+    .vita-cell.visible { opacity: 1; transform: translateY(0); }
+    .vita-cell:nth-child(2) { transition-delay: 0.15s; }
+    .vita-cell:nth-child(3) { transition-delay: 0.3s; }
+    .vita-cell:nth-child(4) { transition-delay: 0.45s; }
+
+    .vita-cell h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; color: var(--gold-light); margin-bottom: 16px;
+    }
+    .vita-cell p { font-size: 13px; color: var(--soft); line-height: 1.9; }
+
+    /* ── RICONOSCIMENTI ── */
+    #riconoscimenti { background: #110e0a; }
+
+    .awards-list { display: flex; flex-direction: column; gap: 2px; }
+    .award-row {
+      display: grid;
+      grid-template-columns: 180px 1fr 200px;
+      align-items: center;
+      padding: 28px 40px;
+      background: #1a140e;
+      transition: background 0.3s;
+      opacity: 0;
+      transition: opacity 0.5s, background 0.3s;
+    }
+    .award-row.visible { opacity: 1; }
+    .award-row:hover { background: #241c14; }
+    .award-year { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--gold); }
+    .award-name { font-size: 13px; color: var(--cream); }
+    .award-org { font-size: 11px; color: var(--soft); text-align: right; letter-spacing: 0.1em; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 60px;
+      border-top: 1px solid #2a2018;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    footer p { font-size: 11px; color: var(--soft); }
+    .footer-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px; color: var(--gold);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      #hero { grid-template-columns: 1fr; }
+      .hero-right { height: 60vw; }
+      nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      section { padding: 80px 24px; }
+      #timeline { padding: 80px 24px; }
+      .discoveries-grid { grid-template-columns: 1fr; }
+      .vita-grid { grid-template-columns: 1fr; }
+      .award-row { grid-template-columns: 80px 1fr; }
+      .award-org { display: none; }
+      footer { flex-direction: column; gap: 20px; text-align: center; }
+      .timeline-list { padding-left: 40px; }
+      .timeline-item { grid-template-columns: 80px 1fr; gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">H. Lamarr</div>
+    <div class="nav-links">
+      <a href="#timeline">Biografia</a>
+      <a href="#scoperte">Scoperte</a>
+      <a href="#vita">Vita</a>
+      <a href="#riconoscimenti">Premi</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div id="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Attrice · Inventrice · Pioniera</p>
+      <h1 class="hero-title">Hedy<br><em>Lamarr</em></h1>
+      <p class="hero-subtitle">
+        L'attrice più bella di Hollywood nascondeva un genio scientifico che avrebbe cambiato le telecomunicazioni per sempre.
+      </p>
+      <div class="hero-dates">
+        <div class="date-item">
+          <span class="date-label">Nascita</span>
+          <span class="date-value">1914</span>
+        </div>
+        <div class="date-item">
+          <span class="date-label">Morte</span>
+          <span class="date-value">2000</span>
+        </div>
+        <div class="date-item">
+          <span class="date-label">Brevetti</span>
+          <span class="date-value">1+</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="portrait-art">
+        <svg viewBox="0 0 600 800" xmlns="http://www.w3.org/2000/svg" class="portrait-svg" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <radialGradient id="bg" cx="50%" cy="40%" r="70%">
+              <stop offset="0%" stop-color="#2a1f10"/>
+              <stop offset="100%" stop-color="#0a0806"/>
+            </radialGradient>
+            <radialGradient id="skin" cx="50%" cy="40%" r="60%">
+              <stop offset="0%" stop-color="#d4a574"/>
+              <stop offset="100%" stop-color="#a0724a"/>
+            </radialGradient>
+            <radialGradient id="glow" cx="50%" cy="30%" r="50%">
+              <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.15"/>
+              <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <!-- Background -->
+          <rect width="600" height="800" fill="url(#bg)"/>
+          <rect width="600" height="800" fill="url(#glow)"/>
+          <!-- Decorative lines -->
+          <g stroke="#c9a84c" stroke-width="0.5" opacity="0.3">
+            <line x1="0" y1="0" x2="600" y2="800"/>
+            <line x1="600" y1="0" x2="0" y2="800"/>
+            <line x1="300" y1="0" x2="300" y2="800"/>
+            <line x1="0" y1="400" x2="600" y2="400"/>
+          </g>
+          <!-- Circles -->
+          <circle cx="300" cy="300" r="280" fill="none" stroke="#c9a84c" stroke-width="0.5" opacity="0.15"/>
+          <circle cx="300" cy="300" r="200" fill="none" stroke="#c9a84c" stroke-width="0.5" opacity="0.1"/>
+          <!-- Silhouette body -->
+          <ellipse cx="300" cy="720" rx="160" ry="140" fill="#1a120a"/>
+          <!-- Dress/upper body -->
+          <path d="M180 680 Q220 600 240 560 Q300 540 360 560 Q380 600 420 680 Z" fill="#1a120a"/>
+          <!-- Neck -->
+          <rect x="280" y="490" width="40" height="70" rx="8" fill="url(#skin)"/>
+          <!-- Head -->
+          <ellipse cx="300" cy="420" rx="90" ry="105" fill="url(#skin)"/>
+          <!-- Hair (dark, elegant) -->
+          <path d="M215 390 Q200 300 240 240 Q300 190 360 240 Q400 300 385 390 Q360 340 300 330 Q240 340 215 390Z" fill="#1a0d05"/>
+          <path d="M210 390 Q200 450 215 490 Q190 470 185 430 Q175 390 185 360Z" fill="#1a0d05"/>
+          <path d="M390 390 Q400 450 385 490 Q410 470 415 430 Q425 390 415 360Z" fill="#1a0d05"/>
+          <!-- Eyes -->
+          <ellipse cx="268" cy="415" rx="18" ry="10" fill="#f0dabb"/>
+          <ellipse cx="332" cy="415" rx="18" ry="10" fill="#f0dabb"/>
+          <ellipse cx="268" cy="416" rx="11" ry="8" fill="#3d1f0a"/>
+          <ellipse cx="332" cy="416" rx="11" ry="8" fill="#3d1f0a"/>
+          <ellipse cx="268" cy="416" rx="6" ry="6" fill="#0a0500"/>
+          <ellipse cx="332" cy="416" rx="6" ry="6" fill="#0a0500"/>
+          <ellipse cx="271" cy="413" rx="2.5" ry="2.5" fill="white"/>
+          <ellipse cx="335" cy="413" rx="2.5" ry="2.5" fill="white"/>
+          <!-- Eyebrows -->
+          <path d="M252 402 Q268 396 285 400" stroke="#1a0d05" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M315 400 Q332 396 348 402" stroke="#1a0d05" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Nose -->
+          <path d="M295 420 Q292 440 288 448 Q300 452 312 448 Q308 440 305 420" fill="none" stroke="#a0724a" stroke-width="1.5" opacity="0.7"/>
+          <!-- Lips -->
+          <path d="M278 462 Q300 455 322 462 Q300 476 278 462Z" fill="#8b2020"/>
+          <path d="M278 462 Q300 467 322 462 Q300 478 278 462Z" fill="#6b1818"/>
+          <!-- Jewelry - necklace hint -->
+          <path d="M265 560 Q300 575 335 560" stroke="#c9a84c" stroke-width="1.5" fill="none" opacity="0.7"/>
+          <!-- Film frames decorative element -->
+          <g opacity="0.2" fill="none" stroke="#c9a84c" stroke-width="1">
+            <rect x="20" y="20" width="60" height="80"/>
+            <rect x="25" y="28" width="50" height="64"/>
+            <line x1="45" y1="20" x2="45" y2="100"/>
+            <line x1="55" y1="20" x2="55" y2="100"/>
+          </g>
+          <!-- Circuit/tech pattern bottom right -->
+          <g opacity="0.2" stroke="#c9a84c" stroke-width="1" fill="none">
+            <line x1="490" y1="650" x2="560" y2="650"/>
+            <line x1="530" y1="650" x2="530" y2="720"/>
+            <line x1="490" y1="720" x2="570" y2="720"/>
+            <circle cx="490" cy="650" r="4"/>
+            <circle cx="530" cy="685" r="4"/>
+            <circle cx="570" cy="720" r="4"/>
+            <line x1="490" y1="680" x2="520" y2="680"/>
+            <line x1="490" y1="680" x2="490" y2="720"/>
+          </g>
+          <!-- Gold text overlay -->
+          <text x="300" y="790" font-family="Playfair Display, serif" font-size="14" fill="#c9a84c" text-anchor="middle" opacity="0.6" letter-spacing="4">HEDWIG EVA MARIA KIESLER</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div id="timeline">
+    <div>
+      <p class="section-label">Biografia</p>
+      <h2 class="section-title">Una vita tra<br><em>Hollywood e l'invenzione</em></h2>
+
+      <div class="timeline-list">
+
+        <div class="timeline-item">
+          <div class="t-year">1914</div>
+          <div class="t-body">
+            <h3>Nascita a Vienna</h3>
+            <p>Hedwig Eva Maria Kiesler nasce il 9 novembre 1914 a Vienna, in Austria, da una famiglia ebraica benestante. Il padre è direttore di banca, la madre pianista. Cresce circondata da arte, musica e cultura.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="t-year">1933</div>
+          <div class="t-body">
+            <h3>Lo scandalo di <em>Estasi</em></h3>
+            <p>A soli 18 anni recita nel film cecoslovacco "Estasi" diretto da Gustav Machatý, diventando la prima attrice a girare una scena di nudo esplicito nella storia del cinema. Il film è bandito in molti paesi e il Papa lo condanna pubblicamente.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="t-year">1937</div>
+          <div class="t-body">
+            <h3>La fuga da Mandl</h3>
+            <p>Dopo un matrimonio infelice con il magnate delle armi Friedrich Mandl — che la teneva prigioniera come un'opera d'arte — fugge a Parigi travestita da cameriera. Attraversa l'Atlantico e approda a Hollywood, dove Louis B. Mayer di MGM la incontra sul transatlantico.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="t-year">1938</div>
+          <div class="t-body">
+            <h3>Nasce Hedy Lamarr</h3>
+            <p>Louis B. Mayer le propone un contratto e le suggerisce un nuovo nome d'arte: Hedy Lamarr. Il nome è ispirato all'attrice Barbara La Marr, morta prematuramente. Inizia così una delle carriere più luminose di Hollywood.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="t-year">1940</div>
+          <div class="t-body">
+            <h3>Incontra George Antheil</h3>
+            <p>A Hollywood conosce il compositore avanguardista George Antheil. Inizia una collaborazione straordinaria: insieme sviluppano un sistema di comunicazione radio a "salto di frequenza" per guidare siluri teleguidati senza essere intercettati dai nemici nazisti.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="t-year">1942</div>
+          <div class="t-body">
+            <h3>Il brevetto rivoluzionario</h3>
+            <p>Ottengono il brevetto US n. 2.292.387 per il loro sistema di comunicazione sicura basato su uno spettro radio variabile. L'idea si ispira ai pianoforti a rullo che Antheil usava per sincronizzare le sue composizioni. La Marina americana tuttavia ignorerà l'invenzione per decenni.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="t-year">1949</div>
+          <div class="t-body">
+            <h3>Apice a Hollywood</h3>
+            <p>Tra il 1938 e il 1949 recita in oltre 30 film, lavorando con Clark Gable, James Stewart e Spencer Tracy. È considerata la donna più bella del mondo. Nel 1949 recita in "Sansone e Dalila", uno dei maggiori successi al botteghino dell'anno.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="t-year">1997</div>
+          <div class="t-body">
+            <h3>Il riconoscimento tardivo</h3>
+            <p>A 82 anni, Hedy Lamarr riceve finalmente l'Electronic Frontier Foundation Pioneer Award. È la prima donna a ricevere il BULBIE Gnass Spirit of Achievement Award, soprannominato il Nobel dell'invenzione. Cinquant'anni dopo che il brevetto era scaduto senza che lei ricevesse un centesimo.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="t-year">2000</div>
+          <div class="t-body">
+            <h3>La scomparsa</h3>
+            <p>Hedy Lamarr muore il 19 gennaio 2000 a Casselberry, Florida, all'età di 85 anni. Le sue ceneri vengono sparse nella Foresta di Vienna, come aveva sempre desiderato. Austria le tributa onori di stato postumi.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- SCOPERTE -->
+  <div id="scoperte" style="background: var(--ink); padding: 120px 0;">
+    <section style="padding: 0 60px; max-width: 1400px; margin: 0 auto;">
+      <p class="section-label">Invenzioni & Scoperte</p>
+      <h2 class="section-title">Il genio dietro<br><em>la bellezza</em></h2>
+    </section>
+    <div class="discoveries-grid" style="max-width: 1400px; margin: 0 auto; padding: 0 60px;">
+
+      <div class="discovery-card">
+        <div class="disc-number">01</div>
+        <div class="disc-icon">📡</div>
+        <h3 class="disc-title">Frequency Hopping Spread Spectrum</h3>
+        <p class="disc-text">L'invenzione fondamentale: un sistema che fa "saltare" il segnale radio su diverse frequenze in modo imprevedibile e sincronizzato tra trasmettitore e ricevitore. Brevettato nel 1942, è la base su cui oggi funzionano Wi-Fi, Bluetooth e GPS.</p>
+        <span class="disc-tag">Brevetto 1942</span>
+      </div>
+
+      <div class="discovery-card">
+        <div class="disc-number">02</div>
+        <div class="disc-icon">🔒</div>
+        <h3 class="disc-title">Comunicazioni Sicure</h3>
+        <p class="disc-text">L'obiettivo originale era militare: rendere impossibile per i nazisti intercettare o disturbare i segnali che guidavano i siluri americani. La tecnica rendeva il segnale invisibile al nemico perché distribuito su decine di frequenze diverse.</p>
+        <span class="disc-tag">Sicurezza Militare</span>
+      </div>
+
+      <div class="discovery-card">
+        <div class="disc-number">03</div>
+        <div class="disc-icon">📶</div>
+        <h3 class="disc-title">Fondamento del Wi-Fi</h3>
+        <p class="disc-text">Il principio del "salto di frequenza" è alla base dell'IEEE 802.11 (Wi-Fi) e del Bluetooth. Ogni volta che si connette uno smartphone o un laptop a una rete wireless, si utilizza una tecnologia il cui seme fu piantato da Hedy Lamarr nel 1942.</p>
+        <span class="disc-tag">Wi-Fi & Bluetooth</span>
+      </div>
+
+      <div class="discovery-card">
+        <div class="disc-number">04</div>
+        <div class="disc-icon">🎹</div>
+        <h3 class="disc-title">Ispirazione dal Pianoforte</h3>
+        <p class="disc-text">La brillante intuizione tecnica nacque dall'arte: Antheil usava rotoli perforati per sincronizzare i pianofoli nelle sue composizioni avant-garde. Lamarr capì che la stessa tecnica di sincronizzazione poteva applicarsi alle frequenze radio.</p>
+        <span class="disc-tag">Arte + Scienza</span>
+      </div>
+
+      <div class="discovery-card">
+        <div class="disc-number">05</div>
+        <div class="disc-icon">🌐</div>
+        <h3 class="disc-title">CDMA e 3G/4G/5G</h3>
+        <p class="disc-text">Il Code Division Multiple Access (CDMA), tecnologia alla base di tutte le reti mobili moderne dal 3G al 5G, discende direttamente dal principio dello spread spectrum. Miliardi di chiamate telefoniche giornaliere portano l'impronta di Lamarr.</p>
+        <span class="disc-tag">Reti Mobili</span>
+      </div>
+
+      <div class="discovery-card">
+        <div class="disc-number">06</div>
+        <div class="disc-icon">🌊</div>
+        <h3 class="disc-title">Progetto Cubo di Ghiaccio</h3>
+        <p class="disc-text">Meno nota ma documentata: durante la seconda guerra mondiale collaborò a un progetto per migliorare i propulsori dei siluri. La sua mente spaziava dalla fisica alle comunicazioni, dimostrando una curiosità scientifica genuina e poliedrica.</p>
+        <span class="disc-tag">Fisica Applicata</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- QUOTE -->
+  <div id="quote">
+    <blockquote class="quote-text">
+      "Qualsiasi ragazza può essere glamour. Tutto ciò che devi fare è <em>stare ferma e sembrare stupida</em>."
+    </blockquote>
+    <p class="quote-author">— Hedy Lamarr</p>
+  </div>
+
+  <!-- VITA PRIVATA -->
+  <div id="vita" style="padding: 120px 60px; background: var(--ink);">
+    <section style="padding: 0; max-width: 1400px; margin: 0 auto;">
+      <p class="section-label">Vita Privata</p>
+      <h2 class="section-title">La donna oltre<br><em>il personaggio</em></h2>
+      <div class="vita-grid">
+        <div class="vita-cell">
+          <h3>Sei Matrimoni</h3>
+          <p>Hedy Lamarr si sposò sei volte: Friedrich Mandl (1933), Gene Markey (1939), John Loder (1943), Ernesto Tefft de Almassy (1951), W. Howard Lee (1953) e Lewis J. Boies (1963). Ogni matrimonio terminò in divorzio. Definì l'amore come "la cosa più difficile da scrivere nella vita."</p>
+        </div>
+        <div class="vita-cell">
+          <h3>L'Auto-Didatta</h3>
+          <p>Senza mai una formazione ingegneristica formale, Lamarr aveva allestito un laboratorio nella sua casa di Hollywood dove sperimentava e inventava. Leggeva manuali tecnici tra un ciak e l'altro. I suoi vicini la ricordano con schemi e diagrammi sparsi ovunque.</p>
+        </div>
+        <div class="vita-cell">
+          <h3>Il Brevetto Scaduto</h3>
+          <p>Il brevetto del 1942 scadde nel 1959 prima che la Marina USA lo adottasse ufficialmente durante la crisi dei missili di Cuba nel 1962. Lamarr non ricevette mai alcun compenso, poiché il brevetto era già di dominio pubblico quando divenne commercialmente prezioso.</p>
+        </div>
+        <div class="vita-cell">
+          <h3>Gli Ultimi Anni</h3>
+          <p>Ritiratasi a vita privata negli anni '70, Lamarr visse in reclusa in Florida, raramente uscendo di casa. Combatté problemi legali e di salute, ma mantenne la sua acutezza intellettuale fino alla fine. Nell'ultima intervista disse: "Non voglio essere ricordata come attrice, ma come inventrice."</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- RICONOSCIMENTI -->
+  <div id="riconoscimenti" style="background: #110e0a; padding: 120px 60px;">
+    <section style="padding: 0; max-width: 1400px; margin: 0 auto;">
+      <p class="section-label">Premi & Onori</p>
+      <h2 class="section-title">Il tardivo<br><em>riconoscimento</em></h2>
+
+      <div class="awards-list">
+        <div class="award-row">
+          <div class="award-year">1960</div>
+          <div class="award-name">Stella sulla Hollywood Walk of Fame</div>
+          <div class="award-org">Hollywood, California</div>
+        </div>
+        <div class="award-row">
+          <div class="award-year">1997</div>
+          <div class="award-name">EFF Pioneer Award</div>
+          <div class="award-org">Electronic Frontier Foundation</div>
+        </div>
+        <div class="award-row">
+          <div class="award-year">1997</div>
+          <div class="award-name">BULBIE Gnass Spirit of Achievement Award</div>
+          <div class="award-org">Invention Convention</div>
+        </div>
+        <div class="award-row">
+          <div class="award-year">2003</div>
+          <div class="award-name">Introdotta all'National Inventors Hall of Fame</div>
+          <div class="award-org">USPTO, Washington D.C.</div>
+        </div>
+        <div class="award-row">
+          <div class="award-year">2014</div>
+          <div class="award-name">Commemorazione del centenario della nascita</div>
+          <div class="award-org">Repubblica d'Austria</div>
+        </div>
+        <div class="award-row">
+          <div class="award-year">2017</div>
+          <div class="award-name">Google Doodle in suo onore</div>
+          <div class="award-org">Google — 101° anniversario</div>
+        </div>
+        <div class="award-row">
+          <div class="award-year">2022</div>
+          <div class="award-name">Inserita nella Wireless History Foundation Hall of Fame</div>
+          <div class="award-org">IEEE & Wireless Foundation</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-name">Hedy Lamarr</div>
+    <p>1914 – 2000 · Attrice · Inventrice · Pioniera</p>
+    <p style="font-size:10px; color: #4a3a2a;">Sito informativo a scopo culturale ed educativo</p>
+  </footer>
+
+  <script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top = my + 'px';
+    });
+
+    function animateRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button, .discovery-card, .award-row').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'translate(-50%, -50%) scale(2)';
+        ring.style.opacity = '1';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+        ring.style.opacity = '0.5';
+      });
+    });
+
+    // Intersection Observer for scroll animations
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.timeline-item, .vita-cell, .award-row').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Staggered award row delays
+    document.querySelectorAll('.award-row').forEach((row, i) => {
+      row.style.transitionDelay = (i * 0.08) + 's';
+    });
+  </script>
+</body>
+</html>
