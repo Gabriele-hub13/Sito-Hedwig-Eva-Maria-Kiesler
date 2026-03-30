@@ -1,25 +1,370 @@
-<html>
-  <head>
-    <title>
-    	HEDY LAMARR
-    </title>
-  </head>
-  <body>
-    <center>
-    	<h1>
-    		Hedwig Eva Maria Kiesler 
-    	</h1>
-    </center>
-  </body>
-</html>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hedy Lamarr - Attrice e Inventrice</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-CHI ERA VERAMENTE FUORI DAL GRANDE SCHERMO?
-IN CHE MODO IL SUO BACKGROUND VIENNA NEGLI ANNI '30 HA INFLUENZATO LE SUE CAPACITA' TECNICHE?
-COS'E' IL FREQUENCE HOPPING E COME E' NATO DALLA COLLABORAZIONE CON IL COMPOSITORE GEORGE ANTHEIL? 
-QUAL ERA IL LORO OBIETTIVO ORIGINALE NEL BREVETTO DEL '42?
-PERCHE' LA MARINA RIFIUTO' LA SUA INVENZIONE IN WW2?
-IN CHE MODO GEORGE E I TEMPI HANNO OSCURATO LA SUA PRESENZA NELL'INVEZIONE?
-PERCHE' IL SUO CONTRIBUTO E' RIMASTO SEGRETO PER 50 ANNI? 
-SENZA LE SUE SCOPERTE COME SAREBBE DIVERSA LA TECNOLOGIA ATTUALE?
-QUALI SONO I PRIMI PREMI UFFICIALI RICEVUTI?
-COSA CI INSEGNA LA SUA STORIA SUL DIVARIO DI GENERE NELLE DISCIPINE STEM? 
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.8;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50, #4a0e0e);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+        }
+
+        header p {
+            font-size: 1.3em;
+            font-style: italic;
+            opacity: 0.9;
+        }
+
+        nav {
+            background-color: #1a1a1a;
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #d4af37;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        section {
+            background: white;
+            margin-bottom: 40px;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        section h2 {
+            color: #4a0e0e;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #d4af37;
+        }
+
+        .intro {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .intro-text {
+            flex: 1;
+        }
+
+        .placeholder-img {
+            width: 300px;
+            height: 400px;
+            background: linear-gradient(135deg, #ddd, #bbb);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #d4af37;
+        }
+
+        .timeline-item {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -34px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: #4a0e0e;
+            border-radius: 50%;
+            border: 2px solid #d4af37;
+        }
+
+        .timeline-item strong {
+            color: #4a0e0e;
+        }
+
+        .film-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .film-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #d4af37;
+        }
+
+        .film-card h3 {
+            color: #4a0e0e;
+            margin-bottom: 10px;
+        }
+
+        .invention-box {
+            background: linear-gradient(135deg, #f8f4e8, #fff);
+            border: 2px solid #d4af37;
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .invention-box h3 {
+            color: #4a0e0e;
+            margin-bottom: 15px;
+        }
+
+        blockquote {
+            background: #f9f9f9;
+            border-left: 4px solid #d4af37;
+            padding: 20px 30px;
+            margin: 20px 0;
+            font-style: italic;
+            font-size: 1.2em;
+        }
+
+        blockquote cite {
+            display: block;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        footer {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        footer p {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .intro {
+                flex-direction: column;
+            }
+
+            .placeholder-img {
+                width: 100%;
+                height: 300px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>HEDY LAMARR</h1>
+        <p>La donna più bella del cinema che inventò il futuro</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#biografia">Biografia</a></li>
+            <li><a href="#carriera">Carriera</a></li>
+            <li><a href="#invenzioni">Invenzioni</a></li>
+            <li><a href="#eredita">Eredità</a></li>
+        </ul>
+    </nav>
+
+    <main>
+
+        <section id="biografia">
+            <h2>Biografia</h2>
+            <div class="intro">
+                <div class="intro-text">
+                    <p><strong>Hedy Lamarr</strong>, nata <strong>Hedwig Eva Maria Kiesler</strong> il 9 novembre 1914 a Vienna, fu un'attrice austro-americana e inventrice, celebrata come una delle donne più belle della sua epoca.</p>
+                    
+                    <p>Figlia di un banchiere e di una pianista, crebbe in un ambiente colto e benestante. Fin da giovane mostrò una mente brillante e una curiosità insaziabile per la scienza e la tecnologia, incoraggiata dal padre che le spiegava il funzionamento delle macchine durante le loro passeggiate.</p>
+                    
+                    <p>Si trasferì a Hollywood negli anni '30, fuggendo da un matrimonio infelice con il mercante d'armi austriaco Fritz Mandl. Negli Stati Uniti reinventò se stessa, cambiando nome e costruendo una carriera leggendaria.</p>
+                    
+                    <p>Morì il 19 gennaio 2000 a Casselberry, Florida, all'età di 85 anni.</p>
+                </div>
+                <div class="placeholder-img">
+                    [Inserire foto di Hedy Lamarr]
+                </div>
+            </div>
+        </section>
+
+        <section id="carriera">
+            <h2>Carriera Cinematografica</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <strong>1933</strong> - Debutta nel controverso film cecoslovacco "Estasi", che la rese famosa in Europa.
+                </div>
+                <div class="timeline-item">
+                    <strong>1938</strong> - Firma un contratto con la MGM e arriva a Hollywood.
+                </div>
+                <div class="timeline-item">
+                    <strong>1939</strong> - Recita in "Algeri" accanto a Charles Boyer, ottenendo grande successo.
+                </div>
+                <div class="timeline-item">
+                    <strong>1941</strong> - Protagonista di "Come Back" e "Ziegfeld Girl".
+                </div>
+                <div class="timeline-item">
+                    <strong>1949</strong> - Interpreta Dalila in "Sansone e Dalila" di Cecil B. DeMille.
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; margin-bottom: 20px;">Film Principali</h3>
+            <div class="film-grid">
+                <div class="film-card">
+                    <h3>Algeri (1938)</h3>
+                    <p>Il film che la lanciò come star di Hollywood, recitando nel ruolo della misteriosa Gaby.</p>
+                </div>
+                <div class="film-card">
+                    <h3>Sansone e Dalila (1949)</h3>
+                    <p>Interpretazione iconica della seduttrice biblica, diretto da Cecil B. DeMille.</p>
+                </div>
+                <div class="film-card">
+                    <h3>La febbre del petrolio (1940)</h3>
+                    <p>Accanto a Clark Gable e Spencer Tracy in questa avventura drammatica.</p>
+                </div>
+                <div class="film-card">
+                    <h3>La donna dei miracoli (1940)</h3>
+                    <p>Un ruolo che mise in luce le sue capacità drammatiche.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="invenzioni">
+            <h2>L'Inventrice Geniale</h2>
+            
+            <p>Al di là della bellezza e del talento cinematografico, Hedy Lamarr possedeva una mente scientifica straordinaria. Durante la Seconda Guerra Mondiale, preoccupata per le sorti del conflitto, decise di mettere il suo intelletto al servizio della causa alleata.</p>
+
+            <div class="invention-box">
+                <h3>Il Sistema di Comunicazione a Spettro Espanso</h3>
+                <p>Nel 1942, insieme al compositore George Antheil, Hedy brevettò un sistema di guida per siluri basato sul <strong>"frequency hopping"</strong> (salto di frequenza). L'idea era di far "saltare" il segnale radio tra diverse frequenze seguendo uno schema prestabilito, rendendo impossibile ai nemici intercettare o disturbare le comunicazioni.</p>
+                
+                <p>L'ispirazione venne dalla sua conoscenza dei sistemi d'arma (acquisita durante il matrimonio con Mandl) e dalla passione di Antheil per i rulli perforati delle pianole automatiche.</p>
+                
+                <p><strong>Il brevetto numero 2.292.387</strong> fu concesso l'11 agosto 1942, ma la Marina americana non lo utilizzò durante la guerra, considerandolo troppo complesso.</p>
+            </div>
+
+            <blockquote>
+                "Le persone inventive devono essere come spugne, assorbendo tutto ciò che vedono e sentono. Devono essere curiose."
+                <cite>— Hedy Lamarr</cite>
+            </blockquote>
+
+            <h3 style="margin-top: 30px;">L'Eredità Tecnologica</h3>
+            <p>Il principio del frequency hopping è oggi alla base di tecnologie fondamentali:</p>
+            <ul style="margin-top: 15px; margin-left: 20px;">
+                <li><strong>Wi-Fi</strong> - Le reti wireless utilizzano varianti di questa tecnologia</li>
+                <li><strong>Bluetooth</strong> - La comunicazione tra dispositivi si basa sullo stesso principio</li>
+                <li><strong>GPS</strong> - I sistemi di navigazione satellitare ne fanno uso</li>
+                <li><strong>Telefonia mobile</strong> - Le reti cellulari impiegano tecniche derivate</li>
+            </ul>
+        </section>
+
+        <section id="eredita">
+            <h2>Riconoscimenti e Eredità</h2>
+            
+            <p>Per decenni, il contributo scientifico di Hedy Lamarr fu ignorato. Solo verso la fine della sua vita iniziò a ricevere i riconoscimenti meritati:</p>
+
+            <div class="timeline" style="margin-top: 20px;">
+                <div class="timeline-item">
+                    <strong>1997</strong> - Riceve il Pioneer Award dalla Electronic Frontier Foundation.
+                </div>
+                <div class="timeline-item">
+                    <strong>1997</strong> - Diventa la prima donna a ricevere il BULBIE Gnass Spirit of Achievement Award.
+                </div>
+                <div class="timeline-item">
+                    <strong>2014</strong> - Inserita postuma nella National Inventors Hall of Fame.
+                </div>
+                <div class="timeline-item">
+                    <strong>9 novembre</strong> - Dal 2018, questa data (il suo compleanno) è celebrata come "Inventors' Day" in diversi paesi.
+                </div>
+            </div>
+
+            <blockquote>
+                "Qualsiasi ragazza può essere glamour. Tutto quello che devi fare è stare ferma e sembrare stupida."
+                <cite>— Hedy Lamarr</cite>
+            </blockquote>
+
+            <p style="margin-top: 20px;">Hedy Lamarr rappresenta l'esempio perfetto di come il talento e l'intelligenza non conoscano confini. La sua storia ci ricorda che le persone non devono mai essere giudicate o limitate dalle apparenze, e che la creatività può manifestarsi nelle forme più inaspettate.</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>© 2024 - Sito dedicato a Hedy Lamarr</p>
+        <p style="margin-top: 10px; font-size: 0.9em;">Attrice, Inventrice, Pioniera</p>
+    </footer>
+
+</body>
+</html>
