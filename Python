@@ -1,0 +1,717 @@
+from flask import Flask, render_template_string
+import os
+
+app = Flask(__name__)
+
+HTML = r"""<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hedy Lamarr — Genio e Bellezza</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-pale: #F5E6B8;
+    --black: #0A0A0A;
+    --dark: #111111;
+    --dark2: #1A1710;
+    --cream: #F0E8D0;
+    --text: #D4C5A0;
+    --accent: #8B2020;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  /* ── HEADER / HERO ── */
+  header {
+    position: relative;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 60% 80% at 50% 100%, rgba(201,168,76,0.12) 0%, transparent 70%),
+      linear-gradient(180deg, #000 0%, #0e0c07 60%, #1a1408 100%);
+  }
+
+  .deco-lines {
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(201,168,76,0.04) 0px, rgba(201,168,76,0.04) 1px, transparent 1px, transparent 60px),
+      repeating-linear-gradient(0deg,  rgba(201,168,76,0.04) 0px, rgba(201,168,76,0.04) 1px, transparent 1px, transparent 60px);
+  }
+
+  .hero-frame {
+    position: relative; z-index: 2;
+    text-align: center;
+    padding: 60px 20px;
+    animation: fadeUp 1.4s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-ornament {
+    font-size: 14px;
+    letter-spacing: 8px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0.8;
+  }
+
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(72px, 14vw, 160px);
+    font-weight: 900;
+    line-height: 0.9;
+    color: transparent;
+    background: linear-gradient(135deg, #C9A84C 0%, #F5E6B8 40%, #C9A84C 60%, #8B6914 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    letter-spacing: -2px;
+    margin-bottom: 8px;
+  }
+
+  .hero-surname {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 8vw, 90px);
+    letter-spacing: 18px;
+    color: var(--cream);
+    opacity: 0.85;
+    margin-bottom: 32px;
+  }
+
+  .hero-tagline {
+    font-size: clamp(16px, 2.5vw, 22px);
+    font-style: italic;
+    color: var(--gold-light);
+    letter-spacing: 2px;
+    margin-bottom: 48px;
+  }
+
+  .hero-dates {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 6px;
+    color: var(--gold);
+    opacity: 0.6;
+  }
+
+  .scroll-hint {
+    position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--gold); opacity: 0.5;
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    animation: bounce 2s infinite;
+  }
+  .scroll-hint::after {
+    content: ''; display: block;
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+  }
+
+  @keyframes bounce {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    padding: 0 40px;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex; justify-content: center; gap: 0;
+    max-width: 900px; margin: 0 auto;
+  }
+
+  nav a {
+    display: block;
+    padding: 20px 28px;
+    color: var(--text);
+    text-decoration: none;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 3px;
+    font-size: 13px;
+    transition: color 0.3s;
+    position: relative;
+  }
+
+  nav a::after {
+    content: '';
+    position: absolute; bottom: 0; left: 50%; right: 50%;
+    height: 2px; background: var(--gold);
+    transition: left 0.3s, right 0.3s;
+  }
+
+  nav a:hover { color: var(--gold-light); }
+  nav a:hover::after { left: 20%; right: 20%; }
+
+  /* ── SECTIONS ── */
+  section {
+    position: relative; z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 100px 40px;
+  }
+
+  .section-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 8px;
+    color: var(--gold);
+    opacity: 0.6;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.1;
+    margin-bottom: 60px;
+    position: relative;
+  }
+
+  .section-title::after {
+    content: '';
+    display: block;
+    width: 80px; height: 2px;
+    background: linear-gradient(to right, var(--gold), transparent);
+    margin-top: 20px;
+  }
+
+  /* ── BIOGRAPHY ── */
+  .bio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .bio-text p {
+    font-size: 18px;
+    line-height: 1.9;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  .bio-text p:first-child::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 72px;
+    font-weight: 900;
+    color: var(--gold);
+    float: left;
+    line-height: 0.75;
+    margin: 8px 12px 0 0;
+  }
+
+  .bio-portrait {
+    position: relative;
+  }
+
+  .portrait-frame {
+    position: relative;
+    padding: 20px;
+  }
+
+  .portrait-frame::before,
+  .portrait-frame::after {
+    content: '';
+    position: absolute;
+    border: 1px solid var(--gold);
+    opacity: 0.4;
+  }
+
+  .portrait-frame::before {
+    top: 0; left: 0; right: 20px; bottom: 20px;
+  }
+
+  .portrait-frame::after {
+    top: 20px; left: 20px; right: 0; bottom: 0;
+  }
+
+  .portrait-inner {
+    position: relative; z-index: 1;
+    background: var(--dark2);
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 40px 30px;
+    text-align: center;
+  }
+
+  .portrait-icon {
+    font-size: 120px;
+    line-height: 1;
+    margin-bottom: 20px;
+    filter: sepia(1) hue-rotate(0deg);
+  }
+
+  .portrait-caption {
+    font-style: italic;
+    font-size: 14px;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+
+  /* ── TIMELINE ── */
+  #timeline { background: linear-gradient(180deg, transparent, rgba(201,168,76,0.03), transparent); }
+
+  .timeline {
+    position: relative;
+    padding-left: 60px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute; left: 20px; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--gold) 10%, var(--gold) 90%, transparent);
+    opacity: 0.3;
+  }
+
+  .tl-item {
+    position: relative;
+    margin-bottom: 56px;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .tl-item.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .tl-dot {
+    position: absolute;
+    left: -48px; top: 6px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    background: var(--black);
+    box-shadow: 0 0 12px rgba(201,168,76,0.4);
+  }
+
+  .tl-year {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .tl-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--cream);
+    margin-bottom: 8px;
+  }
+
+  .tl-desc {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text);
+    max-width: 640px;
+  }
+
+  /* ── SCOPERTE ── */
+  .inventions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+  }
+
+  .invention-card {
+    background: var(--dark2);
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 40px 32px;
+    position: relative;
+    transition: border-color 0.3s, transform 0.3s;
+    overflow: hidden;
+  }
+
+  .invention-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .invention-card:hover {
+    border-color: rgba(201,168,76,0.4);
+    transform: translateY(-4px);
+  }
+
+  .invention-card:hover::before { opacity: 1; }
+
+  .card-icon {
+    font-size: 40px;
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: var(--cream);
+    margin-bottom: 12px;
+  }
+
+  .card-text {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .card-badge {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 4px 12px;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+  }
+
+  /* ── CITAZIONE ── */
+  .quote-section {
+    background: linear-gradient(135deg, rgba(201,168,76,0.06) 0%, transparent 60%);
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 80px;
+    text-align: center;
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .quote-section::before {
+    content: '\201C';
+    font-family: 'Playfair Display', serif;
+    font-size: 200px;
+    color: var(--gold);
+    opacity: 0.08;
+    position: absolute;
+    top: -40px; left: 40px;
+    line-height: 1;
+  }
+
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3vw, 32px);
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.5;
+    margin-bottom: 32px;
+    position: relative; z-index: 1;
+  }
+
+  .quote-author {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 5px;
+    color: var(--gold);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid rgba(201,168,76,0.15);
+    text-align: center;
+    padding: 60px 40px;
+    position: relative; z-index: 1;
+  }
+
+  .footer-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .footer-sub {
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: var(--text);
+    opacity: 0.4;
+    text-transform: uppercase;
+  }
+
+  /* ── DIVIDER ── */
+  .deco-divider {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px;
+    padding: 20px 0;
+    opacity: 0.4;
+  }
+
+  .deco-divider::before,
+  .deco-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold));
+  }
+
+  .deco-divider::after {
+    background: linear-gradient(to left, transparent, var(--gold));
+  }
+
+  .deco-diamond {
+    width: 8px; height: 8px;
+    background: var(--gold);
+    transform: rotate(45deg);
+  }
+
+  @media (max-width: 768px) {
+    .bio-grid { grid-template-columns: 1fr; }
+    .quote-section { padding: 40px 24px; }
+    nav ul { gap: 0; flex-wrap: wrap; }
+    nav a { padding: 14px 14px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header>
+  <div class="deco-lines"></div>
+  <div class="hero-frame">
+    <div class="hero-ornament">★ Attrice · Inventrice · Pioniera ★</div>
+    <h1 class="hero-name">Hedy</h1>
+    <div class="hero-surname">Lamarr</div>
+    <p class="hero-tagline">"La donna più bella del mondo" che cambiò il futuro della tecnologia</p>
+    <div class="hero-dates">9 Novembre 1914 &nbsp;—&nbsp; 19 Gennaio 2000</div>
+  </div>
+  <div class="scroll-hint">Scorri</div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <ul>
+    <li><a href="#biografia">Biografia</a></li>
+    <li><a href="#timeline">Cronologia</a></li>
+    <li><a href="#scoperte">Scoperte</a></li>
+    <li><a href="#citazione">Parole</a></li>
+  </ul>
+</nav>
+
+<!-- BIOGRAFIA -->
+<section id="biografia">
+  <div class="section-label">Capitolo I</div>
+  <h2 class="section-title">La Donna<br>Oltre il Mito</h2>
+  <div class="bio-grid">
+    <div class="bio-text">
+      <p>Nata <strong style="color:var(--gold-light)">Hedwig Eva Maria Kiesler</strong> a Vienna nel 1914, Hedy Lamarr fu una delle personalità più straordinarie del Novecento. Figlia di un direttore di banca e di una pianista, fin da giovane dimostrò un'intelligenza fuori dal comune che andava ben oltre la sua straordinaria bellezza.</p>
+      <p>A soli 18 anni recitò nel controverso film <em>Estasi</em> (1933), che la rese famosa in tutta Europa. Dopo una prima infelice unione con il magnate delle armi Fritz Mandl, dal quale fuggì rocambolescamente, emigrò negli Stati Uniti dove il produttore Louis B. Mayer la ribattezzò "Hedy Lamarr" e la trasformò in una delle stelle più luminose di Hollywood.</p>
+      <p>Ma sotto i riflettori del cinema, brillava una mente scientifica eccezionale. Nelle pause tra un film e l'altro, Hedy riempiva taccuini di formule e schizzi tecnici. La sua vera passione era l'invenzione, non il glamour.</p>
+    </div>
+    <div class="bio-portrait">
+      <div class="portrait-frame">
+        <div class="portrait-inner">
+          <div class="portrait-icon">💫</div>
+          <div class="portrait-caption">Hedy Lamarr<br>Vienna, 1914 — Orlando, 2000</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="deco-divider" style="max-width:1100px;margin:0 auto;padding:0 40px"><div class="deco-diamond"></div><div class="deco-diamond"></div><div class="deco-diamond"></div></div>
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <div class="section-label">Capitolo II</div>
+  <h2 class="section-title">Una Vita<br>Straordinaria</h2>
+  <div class="timeline">
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1914</div>
+      <div class="tl-title">Nascita a Vienna</div>
+      <div class="tl-desc">Hedwig Eva Maria Kiesler nasce il 9 novembre a Vienna, nell'impero austro-ungarico, da una famiglia ebraica colta e benestante.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1933</div>
+      <div class="tl-title">Estasi e la fama europea</div>
+      <div class="tl-desc">Recita nel film ceco <em>Estasi</em>, diventando celebre in Europa. Il film scandalizza per le prime scene di nudità nella storia del cinema, ma lancia la sua carriera internazionale.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1937</div>
+      <div class="tl-title">La fuga verso la libertà</div>
+      <div class="tl-desc">Fugge dal marito Friedrich Mandl, produttore di armi con simpatie naziste, che la teneva praticamente prigioniera. Si rifugia a Londra e poi negli Stati Uniti.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1938</div>
+      <div class="tl-title">Hollywood e la MGM</div>
+      <div class="tl-desc">Firma un contratto con la Metro-Goldwyn-Mayer. Louis B. Mayer la ribattezza Hedy Lamarr e la lancia come "la donna più bella del mondo".</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1941</div>
+      <div class="tl-title">L'invenzione del Frequency Hopping</div>
+      <div class="tl-desc">Con il compositore George Antheil, brevetta il sistema di comunicazione a salto di frequenza (US Patent 2.292.387). L'invenzione, nata per rendere inattaccabili i siluri americani, anticipa le moderne tecnologie wireless.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1942</div>
+      <div class="tl-title">Il brevetto ignorato</div>
+      <div class="tl-desc">La Marina militare americana rifiuta il brevetto. Hedy decide di donarlo alla nazione — il governo lo terrà segreto per vent'anni, lasciandolo scadere senza alcun riconoscimento.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1997</div>
+      <div class="tl-title">Il riconoscimento tardivo</div>
+      <div class="tl-desc">A 82 anni riceve finalmente l'EFF Pioneer Award dalla Electronic Frontier Foundation. Hedy commenta: "È ora." Nello stesso anno le viene assegnato il Bulbie Gnass Spirit of Achievement Award.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2000</div>
+      <div class="tl-title">L'addio</div>
+      <div class="tl-desc">Hedy Lamarr si spegne il 19 gennaio a Orlando, Florida. Lascia un'eredità scientifica che permea ogni angolo del mondo moderno connesso.</div>
+    </div>
+
+  </div>
+</section>
+
+<div class="deco-divider" style="max-width:1100px;margin:0 auto;padding:0 40px"><div class="deco-diamond"></div><div class="deco-diamond"></div><div class="deco-diamond"></div></div>
+
+<!-- SCOPERTE -->
+<section id="scoperte">
+  <div class="section-label">Capitolo III</div>
+  <h2 class="section-title">Le Scoperte<br>che Cambiarono il Mondo</h2>
+  <div class="inventions-grid">
+
+    <div class="invention-card">
+      <div class="card-icon">📡</div>
+      <div class="card-title">Frequency Hopping Spread Spectrum</div>
+      <div class="card-text">Nel 1941, Hedy e George Antheil brevettano un sistema rivoluzionario: il segnale radio "salta" rapidamente tra 88 frequenze diverse (come i tasti di un pianoforte), rendendo impossibile il disturbo o l'intercettazione nemica. Il concetto è alla base del FHSS.</div>
+      <span class="card-badge">Brevetto 1942</span>
+    </div>
+
+    <div class="invention-card">
+      <div class="card-icon">📶</div>
+      <div class="card-title">Wi-Fi e Bluetooth</div>
+      <div class="card-text">Il principio del frequency hopping di Hedy è il fondamento tecnologico su cui poggiano Wi-Fi, Bluetooth e GPS moderni. Ogni volta che ti connetti a una rete wireless, stai beneficiando dell'intuizione di una diva di Hollywood.</div>
+      <span class="card-badge">Legacy Tecnologica</span>
+    </div>
+
+    <div class="invention-card">
+      <div class="card-icon">🛰️</div>
+      <div class="card-title">Comunicazioni Sicure Militari</div>
+      <div class="card-text">Il sistema di salto di frequenza, riscoperto negli anni '60, divenne fondamentale per le comunicazioni militari sicure durante la Guerra Fredda. La Marina USA lo adottò nei sistemi TACAMO e in altri sistemi di comando nucleare.</div>
+      <span class="card-badge">Applicazione Militare</span>
+    </div>
+
+    <div class="invention-card">
+      <div class="card-icon">🌐</div>
+      <div class="card-title">Spread Spectrum moderno</div>
+      <div class="card-text">Il CDMA (Code Division Multiple Access), tecnologia che permette a milioni di telefoni cellulari di comunicare simultaneamente, si basa sul principio dello spread spectrum inventato da Hedy. Ogni chiamata cellulare porta il suo contributo.</div>
+      <span class="card-badge">Telecomunicazioni</span>
+    </div>
+
+    <div class="invention-card">
+      <div class="card-icon">💡</div>
+      <div class="card-title">Altre Invenzioni</div>
+      <div class="card-text">Hedy non si fermò alle comunicazioni: progettò miglioramenti per i semafori, un tappetino da bagno antiscivolo, e lavorò a un sistema per migliorare la forma idrodinamica degli aeroplani e delle navi, collaborando con Howard Hughes.</div>
+      <span class="card-badge">Inventrice Poliedrica</span>
+    </div>
+
+    <div class="invention-card">
+      <div class="card-icon">🎭</div>
+      <div class="card-title">Dualità Unica</div>
+      <div class="card-text">Hedy fu l'unica persona nella storia ad aver ricevuto sia il massimo riconoscimento Hollywood (Ziegfeld Girl, Sansone e Dalila) che premi scientifici pionieristici. Una dualità che i suoi contemporanei non seppero valorizzare, ma che la storia ha infine celebrato.</div>
+      <span class="card-badge">Icona Culturale</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- CITAZIONE -->
+<section id="citazione">
+  <div class="quote-section">
+    <p class="quote-text">
+      "Qualsiasi ragazza può essere glamour. Tutto quello che devi fare è stare ferma e sembrare stupida."
+    </p>
+    <div class="quote-author">— Hedy Lamarr</div>
+  </div>
+  <br><br>
+  <div class="quote-section" style="margin-top:32px">
+    <p class="quote-text">
+      "Il cervello è sempre più attraente dell'occhio."
+    </p>
+    <div class="quote-author">— Hedy Lamarr</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">Hedy Lamarr</div>
+  <div class="footer-sub">Vienna 1914 — Orlando 2000 &nbsp;·&nbsp; Attrice · Inventrice · Pioniera</div>
+</footer>
+
+<script>
+  // Animazione timeline al scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 120);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.tl-item').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>"""
+
+@app.route('/')
+def index():
+    return render_template_string(HTML)
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    print(f"🎬 Server avviato su http://localhost:{port}")
+    app.run(debug=True, host='0.0.0.0', port=port)
