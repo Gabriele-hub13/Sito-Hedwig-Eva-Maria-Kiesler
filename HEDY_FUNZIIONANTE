@@ -472,7 +472,7 @@
   const presets = [
     {
       label: "Who was Hedy Lamarr really?",
-      answer: `hedy lamara born in 1914 in vienna, she was one of the most famous actresses of her time, she was known as the most beautiful woman in the world In fact, Hedy worked with many famous directors of the era`
+      answer: `hedy lamara born in 1914 in vienna, she was one of the most famous actresses of her time, she was known as the most beautiful woman in the world In fact, Hedy worked with many famous directors of the era, she wasn't only an actress but hedy was a former engineering student in Vienna and an inventor and creator of a remote system that can control torpedoes from dinstance, the she died on 19 gennuary of 2000 at altamonte springs`
     },
     {
       label: "The frequency hopping invention",
