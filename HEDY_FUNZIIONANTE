@@ -472,7 +472,7 @@
   const presets = [
     {
       label: "Who was Hedy Lamarr really?",
-      answer: `People knew my face. Very few knew my mind. I was born Hedwig Eva Maria Kiesler in Vienna in 1914 — a curious girl who took apart machines just to see how they worked, long before anyone pointed a camera at me. Hollywood gave me glamour. It also gave me a cage made of silk. I wore it gracefully, but I always knew there was more. *A brain is far more interesting than a face.* I co-invented a radio communication system with George Antheil in 1942 — the patent expired, the Navy ignored it, and I received nothing. Decades later, that same technology became the foundation of Wi-Fi, Bluetooth, and GPS. So who was I really? An inventor who happened to be beautiful. The world preferred it the other way around.`
+      answer: `hedy lamara born in 1914 in vienna, she was one of the most famous actresses of her time, she was known as the most beautiful woman in the world In fact, Hedy worked with many famous directors of the era`
     },
     {
       label: "The frequency hopping invention",
