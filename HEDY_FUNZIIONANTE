@@ -428,7 +428,7 @@
 
   <div id="chat-container">
     <div class="message hedy visible">
-      <div class="avatar hedy">H</div>
+      <div class="avatar hedy" style="padding:0;overflow:hidden;"><img src="h.png" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;"></div>
       <div class="bubble-wrap">
         <div class="speaker-name">Hedy Lamarr</div>
         <div class="bubble">
@@ -574,7 +574,7 @@
     wrap.className = `message ${role}`;
     const av = document.createElement('div');
     av.className = `avatar ${role}`;
-    av.textContent = role === 'hedy' ? 'H' : 'G';
+    if (role === 'hedy') { av.style.padding = '0'; av.style.overflow = 'hidden'; av.innerHTML = '<img src="h.png" style="width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:50%;">'; } else { av.textContent = 'J'; }
     const bw = document.createElement('div');
     bw.className = 'bubble-wrap';
     const name = document.createElement('div');
